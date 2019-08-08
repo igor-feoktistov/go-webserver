@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-webserver
+  labels:
+    app: go-webserver
+spec:
+  selector:
+    matchLabels:
+      app: go-webserver
+      tier: web
+  template:
+    metadata:
+      labels:
+        app: go-webserver
+        tier: web
+    spec:
+      containers:
+      - name: go-webserver
+        image: gcr.io/google-samples/go-webserver:1.0
+        ports:
+        - containerPort: 8080

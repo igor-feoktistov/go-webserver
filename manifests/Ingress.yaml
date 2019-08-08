@@ -1,0 +1,49 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: go-webserver-certificate
+  namespace: istio-system
+spec:
+  dnsNames:
+  - go-webserver.example.com
+  issuerRef:
+    kind: ClusterIssuer
+    name: selfsigning-issuer
+  secretName: go-webserver-certificate
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: go-webserver-gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      credentialName: "go-webserver-certificate"
+    hosts:
+    - "go-webserver.example.com"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: go-webserver-virtualservice
+spec:
+  hosts:
+  - "go-webserver.example.com"
+  gateways:
+  - go-webserver-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        port:
+          number: 80
+        host: go-webserver
