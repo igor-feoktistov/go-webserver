@@ -17,6 +17,6 @@ spec:
     spec:
       containers:
       - name: go-webserver
-        image: gcr.io/google-samples/go-webserver:1.0
+        image: docker.io/iafeoktistov/go-webserver:1.0
         ports:
         - containerPort: 8080
