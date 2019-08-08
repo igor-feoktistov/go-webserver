@@ -1,0 +1,43 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: go-webserver-certificate
+  namespace: ambassador
+spec:
+  dnsNames:
+  - go-webserver.example.com
+  issuerRef:
+    kind: ClusterIssuer
+    name: selfsigning-issuer
+  secretName: go-webserver-certificate
+---
+apiVersion: getambassador.io/v1
+kind: Mapping
+metadata:
+  name: go-webserver-mapping
+spec:
+  prefix: /
+  service: go-webserver:5000
+---
+apiVersion: getambassador.io/v1
+kind: TLSContext
+metadata:
+  name: go-webserver-context
+spec:
+  hosts:
+  - go-webserver.example.com
+  secret: go-webserver-certificate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: go-webserver
+  labels:
+    app: go-webserver
+spec:
+  selector:
+    app: go-webserver
+    tier: web
+  ports:
+  - port: 80
+    targetPort: 8080
