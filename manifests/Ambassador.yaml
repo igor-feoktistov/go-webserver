@@ -22,7 +22,7 @@ spec:
 apiVersion: getambassador.io/v1
 kind: TLSContext
 metadata:
-  name: go-webserver-context
+  name: go-webserver-tlscontext
 spec:
   hosts:
   - go-webserver.example.com
