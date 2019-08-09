@@ -17,7 +17,8 @@ metadata:
   name: go-webserver-mapping
 spec:
   prefix: /
-  service: go-webserver.default.svc
+  host: go-webserver.example.com
+  service: go-webserver.default
 ---
 apiVersion: getambassador.io/v1
 kind: TLSContext
