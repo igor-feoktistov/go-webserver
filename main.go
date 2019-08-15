@@ -19,6 +19,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
     log.Printf("Serving request: %s", r.URL.Path)
     fmt.Fprintf(w, "<p>GoLang WebServer, version: 1.0.0</p>\n")
     fmt.Fprintf(w, "<p><b>Hostname:</b> %s</p>\n", host)
+    fmt.Fprintf(w, "<p><b>Client-Address:</b> %s</p>\n", r.RemoteAddr)
     fmt.Fprintf(w, "<p><b>Request Headers: </b></p>\n")
     for _, k := range keys {
         fmt.Fprintf(w, "<b>%s:</b> %s</br>\n", k, r.Header[k])
