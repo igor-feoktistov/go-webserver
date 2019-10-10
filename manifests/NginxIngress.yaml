@@ -1,0 +1,33 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: go-webserver-certificate
+spec:
+  dnsNames:
+  - go-webserver.example.com
+  issuerRef:
+    kind: ClusterIssuer
+    name: selfsigning-issuer
+  secretName: go-webserver-certificate
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.com/sticky-cookie-services: "serviceName=go-webserver go_webserver_id expires=1h"
+    nginx.org/redirect-to-https: "true"
+    certmanager.k8s.io/cluster-issuer: selfsigning-issuer
+  name: go-webserver-ingress
+spec:
+  tls:
+  - hosts:
+    - go-webserver.example.com
+    secretName: go-webserver-certificate
+  rules:
+  - host: go-webserver.example.com
+    http:
+      paths:
+      - backend:
+          serviceName: go-webserver
+          servicePort: 80
